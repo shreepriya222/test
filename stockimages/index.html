@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Image</title>
+</head>
+<body>
+    <h2>Upload Image to GitHub Repository</h2>
+    <input type="file" id="fileInput" />
+    <button onclick="uploadImage()">Upload</button>
+    <p id="status"></p>
+
+    <script>
+        async function uploadImage() {
+            const fileInput = document.getElementById("fileInput");
+            if (!fileInput.files.length) {
+                alert("Please select a file first!");
+                return;
+            }
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            // Send to an intermediate storage (your server, GitHub Issues, or any cloud service)
+            const response = await fetch("https://yourserver.com/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            if (response.ok) {
+                document.getElementById("status").innerText = "✅ Image uploaded successfully!";
+            } else {
+                document.getElementById("status").innerText = "❌ Upload failed!";
+            }
+        }
+    </script>
+</body>
+</html>
