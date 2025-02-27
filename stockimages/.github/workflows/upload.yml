@@ -1,0 +1,32 @@
+name: Upload Images to Repository
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"  # Runs every 5 minutes
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  upload-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Download Uploaded Images
+        run: |
+          curl -O https://yourserver.com/uploads/latest_image.jpg
+          mv latest_image.jpg uploads/
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Commit and Push Changes
+        run: |
+          git add uploads/
+          git commit -m "Added new uploaded images"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
